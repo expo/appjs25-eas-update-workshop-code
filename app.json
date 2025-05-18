@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Art Museum",
-    "slug": "appjs24-workflows-workshop-code",
+    "slug": "appjs25-update-workshop-code",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,14 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expo.appjs24-workflows-workshop-code"
+      "bundleIdentifier": "com.expo.appjs25-update-workshop-code"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.expo.appjs24workflowsworkshopcode"
+      "package": "com.expo.appjs25updateworkshopcode"
     },
     "web": {
       "bundler": "metro",
