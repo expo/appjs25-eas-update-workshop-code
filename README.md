@@ -31,24 +31,8 @@ Do these steps to ensure you'll be able to complete the workshop exercises.
 2. Install dependencies with
 
 ```
-npm install
+yarn install
 ```
-
-3. Build and run the app on your iOS simulator:
-
-```
-npx expo run:ios
-```
-
-4. Build and run the app on your Android emulator:
-
-```
-npx expo run:android
-```
-
-If these steps don't work, refer to the [Expo Local Development guide](https://docs.expo.dev/guides/local-app-development/).
-
-**Want to run on a device?** We will be focusing on emulator/simulator usage during the workshop, as it's especially easier for iOS. If you want to do some or all of the workshop on a device, you can also test with `npx expo run:ios --device` and/or `npx expo run:android --device`. Some later sections of the workshop may not work on an iOS device without additional configuration.
 
 ## About the demo app
 
