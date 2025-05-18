@@ -34,6 +34,31 @@ Do these steps to ensure you'll be able to complete the workshop exercises.
 yarn install
 ```
 
+3. Install EAS CLI globally with
+
+```
+npm install -g eas-cli
+```
+
+3. Install EAS CLI globally with
+
+```
+npm install -g eas-cli
+```
+
+4. Log in to your Expo account with
+
+```
+eas login
+```
+
+5. Configure your EAS project to use EAS Build and EAS Update
+
+```
+eas build:configure
+eas update:configure
+```
+
 ## About the demo app
 
 The demo is based off the Expo Router tabs starter (`npx create-expo-app --template tabs`), and also includes Nativewind v4 for most of the styling.
