@@ -55,8 +55,46 @@ eas login
 5. Configure your EAS project to use EAS Build and EAS Update
 
 ```
-eas build:configure
+eas build:configure # Choose the option to configure all platforms
 eas update:configure
+```
+
+6. Run and install the appropriate build command based on your setup:
+
+### Option 1: You have an iOS device and an active Apple Developer account ($99/year membership)
+
+→ Build a development version for your iOS device:
+
+Change the iOS bundle identifier in `app.json` to something unique (e.g. `com.expo.appjs25-update-workshop-code.your-name`) and run:
+
+```
+eas build --platform ios --profile development
+```
+
+Once the build is complete, follow the instructions on the website to install the app.
+
+### Option 2: You have a Mac
+
+→ Build for the iOS Simulator:
+
+```
+eas build --platform ios --profile simulator
+```
+
+### Option 3: You have an Android device
+
+→ Build a development version for your Android device:
+
+```
+eas build --platform android --profile development
+```
+
+### Option 4: None of the above
+
+→ Build for the Android Emulator:
+
+```
+eas build --platform android --profile simulator
 ```
 
 ## About the demo app
