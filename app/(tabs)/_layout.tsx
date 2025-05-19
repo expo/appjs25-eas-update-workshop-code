@@ -63,6 +63,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="three"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon type="FontAwesome" name="gear" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
