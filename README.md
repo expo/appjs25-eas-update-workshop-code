@@ -40,12 +40,6 @@ yarn install
 npm install -g eas-cli
 ```
 
-3. Install EAS CLI globally with
-
-```
-npm install -g eas-cli
-```
-
 4. Log in to your Expo account with
 
 ```
