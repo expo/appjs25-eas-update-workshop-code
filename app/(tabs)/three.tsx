@@ -1,9 +1,12 @@
 import colors from "@/constants/colors";
+import { dateDifferenceInMilliSeconds } from "@/utils/dateUtils";
 import { checkForUpdate, downloadUpdate } from "@/utils/monitorUtils";
 import {
   currentlyRunningDescription,
   currentlyRunningTitle,
 } from "@/utils/updateUtils";
+import { useAppState } from "@/utils/useAppState";
+import { useInterval } from "@/utils/useInterval";
 import { usePersistentDate } from "@/utils/usePersistentDate";
 import { useUpdates, reloadAsync } from "expo-updates";
 import {
@@ -26,8 +29,28 @@ export default function TabThreeScreen() {
   } = useUpdatesReturnType;
 
   const lastCheckForUpdateTime = usePersistentDate(
-    lastCheckForUpdateTimeSinceRestart,
+    lastCheckForUpdateTimeSinceRestart
   );
+
+  const monitorInterval = 1000 * 10; // 10 seconds
+  // Check if needed when app becomes active
+  const appStateHandler = (activating: boolean) => {
+    if (activating) {
+      checkForUpdate();
+    }
+  };
+  const appState = useAppState(appStateHandler);
+  const needsUpdateCheck = () =>
+    dateDifferenceInMilliSeconds(new Date(), lastCheckForUpdateTime) >
+    monitorInterval;
+
+  // This effect runs periodically to see if an update check is needed
+  // The effect interval should be smaller than monitorInterval
+  useInterval(() => {
+    if (appState === "active" && needsUpdateCheck() && !__DEV__) {
+      checkForUpdate();
+    }
+  }, monitorInterval / 4);
 
   return (
     <View className="flex-1 bg-shade-1">
@@ -48,7 +71,7 @@ export default function TabThreeScreen() {
           {currentlyRunningTitle(currentlyRunning)}
           {currentlyRunningDescription(
             currentlyRunning,
-            lastCheckForUpdateTime,
+            lastCheckForUpdateTime
           )}
         </Text>
       </View>
