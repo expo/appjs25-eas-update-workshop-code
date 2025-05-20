@@ -1,21 +1,22 @@
+import IntervalChecker from "@/components/IntervalChecker";
 import colors from "@/constants/colors";
-import { dateDifferenceInMilliSeconds } from "@/utils/dateUtils";
 import { checkForUpdate, downloadUpdate } from "@/utils/monitorUtils";
 import {
   currentlyRunningDescription,
   currentlyRunningTitle,
 } from "@/utils/updateUtils";
-import { useAppState } from "@/utils/useAppState";
-import { useInterval } from "@/utils/useInterval";
 import { usePersistentDate } from "@/utils/usePersistentDate";
 import { useUpdates, reloadAsync } from "expo-updates";
 import {
   ActivityIndicator,
   Button,
+  Platform,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import * as Device from "expo-device";
+import { registerTask } from "@/components/BackgroundChecker";
 
 export default function TabThreeScreen() {
   const useUpdatesReturnType = useUpdates();
@@ -31,26 +32,16 @@ export default function TabThreeScreen() {
   const lastCheckForUpdateTime = usePersistentDate(
     lastCheckForUpdateTimeSinceRestart
   );
-
   const monitorInterval = 1000 * 10; // 10 seconds
-  // Check if needed when app becomes active
-  const appStateHandler = (activating: boolean) => {
-    if (activating) {
-      checkForUpdate();
-    }
-  };
-  const appState = useAppState(appStateHandler);
-  const needsUpdateCheck = () =>
-    dateDifferenceInMilliSeconds(new Date(), lastCheckForUpdateTime) >
-    monitorInterval;
+  const isIOSSimulator = Platform.OS === "ios" && !Device.isDevice;
 
-  // This effect runs periodically to see if an update check is needed
-  // The effect interval should be smaller than monitorInterval
-  useInterval(() => {
-    if (appState === "active" && needsUpdateCheck() && !__DEV__) {
-      checkForUpdate();
-    }
-  }, monitorInterval / 4);
+  let checkingType;
+  if (!isIOSSimulator) {
+    registerTask();
+    checkingType = "Background";
+  } else {
+    checkingType = "Interval Check";
+  }
 
   return (
     <View className="flex-1 bg-shade-1">
@@ -81,6 +72,7 @@ export default function TabThreeScreen() {
         </Text>
       </View>
       <View className="px-4 gap-y-2 py-2">
+        <Text className="text-l">{`Checking method: ${checkingType}`}</Text>
         <Button
           onPress={() => checkForUpdate()}
           disabled={isChecking || isDownloading}
@@ -102,6 +94,13 @@ export default function TabThreeScreen() {
           />
         )}
       </View>
+      {isIOSSimulator && (
+        // background tasks is not supported in iOS simulator so we poll instead
+        <IntervalChecker
+          lastCheckForUpdateTime={lastCheckForUpdateTime}
+          monitorInterval={monitorInterval}
+        />
+      )}
     </View>
   );
 }
