@@ -1,19 +1,29 @@
 import colors from "@/constants/colors";
+import { checkForUpdate, downloadUpdate } from "@/utils/monitorUtils";
 import {
   currentlyRunningDescription,
   currentlyRunningTitle,
 } from "@/utils/updateUtils";
 import { usePersistentDate } from "@/utils/usePersistentDate";
-import { useUpdates } from "expo-updates";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { useUpdates, reloadAsync } from "expo-updates";
+import {
+  ActivityIndicator,
+  Button,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export default function TabThreeScreen() {
+  const useUpdatesReturnType = useUpdates();
   const {
-    currentlyRunning,
     isChecking,
     isDownloading,
+    currentlyRunning,
     lastCheckForUpdateTimeSinceRestart,
-  } = useUpdates();
+    isUpdateAvailable,
+    isUpdatePending,
+  } = useUpdatesReturnType;
 
   const lastCheckForUpdateTime = usePersistentDate(
     lastCheckForUpdateTimeSinceRestart,
@@ -33,17 +43,42 @@ export default function TabThreeScreen() {
           />
         ) : null}
       </View>
-      <>
-        <View className="px-4 gap-y-2 py-2">
-          <Text className="text-l">
-            {currentlyRunningTitle(currentlyRunning)}
-            {currentlyRunningDescription(
-              currentlyRunning,
-              lastCheckForUpdateTime,
-            )}
-          </Text>
-        </View>
-      </>
+      <View className="px-4 gap-y-2 py-2">
+        <Text className="text-l">
+          {currentlyRunningTitle(currentlyRunning)}
+          {currentlyRunningDescription(
+            currentlyRunning,
+            lastCheckForUpdateTime,
+          )}
+        </Text>
+      </View>
+      <View className="flex-row align-middle">
+        <Text className="flex-1 font-semibold text-3xl px-4 py-2 bg-shade-2">
+          Monitor
+        </Text>
+      </View>
+      <View className="px-4 gap-y-2 py-2">
+        <Button
+          onPress={() => checkForUpdate()}
+          disabled={isChecking || isDownloading}
+          title={
+            isChecking ? "Checking for update..." : "Manually check for update"
+          }
+        />
+        {isUpdateAvailable && (
+          <Button
+            onPress={() => downloadUpdate()}
+            disabled={isDownloading}
+            title={"Download update"}
+          />
+        )}
+        {isUpdatePending && (
+          <Button
+            onPress={() => setTimeout(() => reloadAsync(), 2000)}
+            title={"Launch update"}
+          />
+        )}
+      </View>
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import { CurrentlyRunningInfo } from "expo-updates";
 
-const isInDevelopmentMode = (currentlyRunning: CurrentlyRunningInfo) => {
+export const isInDevelopmentMode = (currentlyRunning: CurrentlyRunningInfo) => {
   return __DEV__ && currentlyRunning.updateId === undefined;
 };
 
