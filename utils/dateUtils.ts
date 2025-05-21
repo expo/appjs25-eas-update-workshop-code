@@ -2,7 +2,7 @@
 
 export const date1GreaterThanDate2 = (
   date1: Date | undefined,
-  date2: Date | undefined
+  date2: Date | undefined,
 ) => dateToTimeInMilliSeconds(date1) > dateToTimeInMilliSeconds(date2);
 
 const dateToTimeInMilliSeconds = (date: Date | undefined) =>

@@ -3,7 +3,7 @@ import { Stack, Link, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import { useWorksForDepartmentQuery } from "@/data/hooks/useWorksForDepartmentQuery";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { LoadingShade } from '@/components/LoadingShade';
+import { LoadingShade } from "@/components/LoadingShade";
 
 export default function TabOneScreen() {
   const { department } = useLocalSearchParams<{ department: string }>();

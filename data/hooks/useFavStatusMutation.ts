@@ -1,7 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LocalDatabase } from '@/data/api/local-database';
-
-const data = require("../api/cma_artwork.json");
+import { LocalDatabase } from "@/data/api/local-database";
 
 export const useFavStatusMutation = function () {
   const queryClient = useQueryClient();
@@ -10,11 +8,11 @@ export const useFavStatusMutation = function () {
   const query = useMutation({
     mutationFn: async (favStatus: { id: string; status: boolean }) => {
       const { id, status } = favStatus;
-      return await postToLocal(id, status)
+      return await postToLocal(id, status);
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData([`works:fav:${variables.id}`], variables.status);
-      queryClient.invalidateQueries({ queryKey: ['favs'] })
+      queryClient.invalidateQueries({ queryKey: ["favs"] });
     },
   });
 
