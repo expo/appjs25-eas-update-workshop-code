@@ -14,7 +14,10 @@ export default function VisitScreen() {
           title: "Visit CMA",
         }}
       />
-      <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom }} className="bg-shade-1">
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: insets.bottom }}
+        className="bg-shade-1"
+      >
         <View className="row-y-2 px-4 py-2">
           <Text className="text-4xl font-semibold text-center">
             The Cleveland Museum of Art

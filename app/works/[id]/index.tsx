@@ -5,7 +5,7 @@ import {
   Pressable,
   useWindowDimensions,
 } from "react-native";
-import { Stack, useLocalSearchParams, Link } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import { FontAwesome as Icon } from "@expo/vector-icons";
 import { useWorkByIdQuery } from "@/data/hooks/useWorkByIdQuery";
@@ -86,7 +86,9 @@ export default function DisplayWork() {
           </View>
           {work?.description && (
             <>
-              <Text className="text-xl font-semibold px-4 py-2 bg-shade-2">Description</Text>
+              <Text className="text-xl font-semibold px-4 py-2 bg-shade-2">
+                Description
+              </Text>
               <View className="px-4 gap-y-2 py-2">
                 <Text className="text-l">{stripTags(work.description)}</Text>
               </View>
