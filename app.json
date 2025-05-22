@@ -29,6 +29,10 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
+    },
+    "extra": {
+      "criticalIndex": 0,
+      "message": ""
     }
   }
 }

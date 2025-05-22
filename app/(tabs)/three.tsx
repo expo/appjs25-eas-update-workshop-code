@@ -2,8 +2,9 @@ import IntervalChecker from "@/components/IntervalChecker";
 import colors from "@/constants/colors";
 import { checkForUpdate, downloadUpdate } from "@/utils/monitorUtils";
 import {
-  currentlyRunningDescription,
+  updateInfoDescription,
   currentlyRunningTitle,
+  isAvailableUpdateCritical,
 } from "@/utils/updateUtils";
 import { usePersistentDate } from "@/utils/usePersistentDate";
 import { useUpdates, reloadAsync } from "expo-updates";
@@ -16,6 +17,7 @@ import {
   View,
 } from "react-native";
 import * as Device from "expo-device";
+import { useEffect } from "react";
 
 export default function TabThreeScreen() {
   const useUpdatesReturnType = useUpdates();
@@ -26,6 +28,7 @@ export default function TabThreeScreen() {
     lastCheckForUpdateTimeSinceRestart,
     isUpdateAvailable,
     isUpdatePending,
+    availableUpdate,
   } = useUpdatesReturnType;
 
   const lastCheckForUpdateTime = usePersistentDate(
@@ -33,6 +36,26 @@ export default function TabThreeScreen() {
   );
   const monitorInterval = 1000 * 10; // 10 seconds
   const isIOSSimulator = Platform.OS === "ios" && !Device.isDevice;
+
+  const isUpdateCritical = isAvailableUpdateCritical({
+    currentlyRunning,
+    availableUpdate,
+  });
+  const backgroundColor = isUpdateCritical ? "red-600" : "gray-600";
+
+  // If update is critical, download it
+  useEffect(() => {
+    if (isUpdateCritical && !isUpdatePending) {
+      downloadUpdate();
+    }
+  }, [isUpdateCritical, isUpdatePending]);
+
+  // Run the update (after delay) if download completes successfully and it is critical
+  useEffect(() => {
+    if (isUpdatePending && isUpdateCritical) {
+      setTimeout(() => reloadAsync(), 2000);
+    }
+  }, [isUpdateCritical, isUpdatePending]);
 
   let checkingType;
   if (!isIOSSimulator) {
@@ -58,12 +81,31 @@ export default function TabThreeScreen() {
       <View className="px-4 gap-y-2 py-2">
         <Text className="text-l">
           {currentlyRunningTitle(currentlyRunning)}
-          {currentlyRunningDescription(
-            currentlyRunning,
-            lastCheckForUpdateTime
-          )}
+          {updateInfoDescription(currentlyRunning, lastCheckForUpdateTime)}
         </Text>
       </View>
+      {Boolean(availableUpdate) && (
+        <View className={`flex bg-${backgroundColor}`}>
+          <View className="flex-row">
+            <Text className="flex-1 font-semibold text-3xl px-4 py-2 bg-shade-2">
+              Available Update
+            </Text>
+            {isChecking || isDownloading ? (
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                size="large"
+                color={colors.tint}
+              />
+            ) : null}
+          </View>
+          <View className="px-4 gap-y-2 py-2">
+            <Text className="text-l">
+              Type: {isUpdateCritical ? "Critical Update" : "Update"}
+              {updateInfoDescription(availableUpdate, lastCheckForUpdateTime)}
+            </Text>
+          </View>
+        </View>
+      )}
       <View className="flex-row align-middle">
         <Text className="flex-1 font-semibold text-3xl px-4 py-2 bg-shade-2">
           Monitor
