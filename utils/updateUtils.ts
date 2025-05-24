@@ -52,6 +52,12 @@ const getExpoConfigExtra = (manifest?: Partial<Manifest>) => {
   }
 };
 
+export const getExpoConfigUpdates = (manifest?: Partial<Manifest>) => {
+  if (manifest && "extra" in manifest) {
+    return manifest?.extra?.expoClient?.updates;
+  }
+};
+
 export const isAvailableUpdateCritical = ({
   currentlyRunning,
   availableUpdate,

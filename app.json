@@ -33,6 +33,9 @@
     "extra": {
       "criticalIndex": 0,
       "message": ""
+    },
+    "updates": {
+      "disableAntiBrickingMeasures": true
     }
   }
 }
