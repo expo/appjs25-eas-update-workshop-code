@@ -10,7 +10,7 @@ export const setupBackgroundUpdates = async () => {
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
       await Updates.fetchUpdateAsync();
-      setTimeout(() => Updates.reloadAsync(), 2000);
+      await Updates.reloadAsync();
     }
     return Promise.resolve();
   });
