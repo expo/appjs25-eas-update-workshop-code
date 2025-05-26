@@ -20,14 +20,17 @@ module.exports = () => {
       assetBundlePatterns: ["**/*"],
       ios: {
         supportsTablet: true,
-        // bundleIdentifier: `com.expo.appjs25updateworkshopcode.[your-username].${appVariant}`,
+        bundleIdentifier: `com.expo.appjs25updateworkshopcode.${appVariant}`,
+        infoPlist: {
+          ITSAppUsesNonExemptEncryption: false,
+        },
       },
       android: {
         adaptiveIcon: {
           foregroundImage: "./assets/images/adaptive-icon.png",
           backgroundColor: "#ffffff",
-          // package: `com.expo.appjs25updateworkshopcode.[your-username].${appVariant}`,
         },
+        package: `com.expo.appjs25updateworkshopcode.${appVariant}`,
       },
       web: {
         bundler: "metro",
@@ -39,6 +42,16 @@ module.exports = () => {
       },
       runtimeVersion: {
         policy: "appVersion",
+      },
+      updates: {
+        url: "https://u.expo.dev/01d16a23-775b-4185-8d6f-f219b7a3ef00",
+      },
+      extra: {
+        eas: {
+          projectId: "01d16a23-775b-4185-8d6f-f219b7a3ef00",
+          criticalIndex: 0,
+          message: "",
+        },
       },
     },
   };

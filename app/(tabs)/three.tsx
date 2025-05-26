@@ -6,17 +6,24 @@ import {
   currentlyRunningTitle,
 } from "@/utils/updateUtils";
 import { usePersistentDate } from "@/utils/usePersistentDate";
-import { useUpdates, reloadAsync } from "expo-updates";
+import {
+  useUpdates,
+  reloadAsync,
+  readLogEntriesAsync,
+  UpdatesLogEntry,
+} from "expo-updates";
 import {
   ActivityIndicator,
   Button,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import * as Device from "expo-device";
-import { registerTask } from "@/components/BackgroundChecker";
+import * as BackgroundTask from "expo-background-task";
+import { useState } from "react";
 
 export default function TabThreeScreen() {
   const useUpdatesReturnType = useUpdates();
@@ -34,10 +41,10 @@ export default function TabThreeScreen() {
   );
   const monitorInterval = 1000 * 10; // 10 seconds
   const isIOSSimulator = Platform.OS === "ios" && !Device.isDevice;
+  const [logs, setLog] = useState<UpdatesLogEntry[]>([]);
 
   let checkingType;
   if (!isIOSSimulator) {
-    registerTask();
     checkingType = "Background";
   } else {
     checkingType = "Interval Check";
@@ -93,6 +100,16 @@ export default function TabThreeScreen() {
             title={"Launch update"}
           />
         )}
+        {!isIOSSimulator && (
+          <Button
+            onPress={async () => {
+              await BackgroundTask.triggerTaskWorkerForTestingAsync();
+              const logs = await readLogEntriesAsync();
+              setLog(logs);
+            }}
+            title={"Trigger background task"}
+          />
+        )}
       </View>
       {isIOSSimulator && (
         // background tasks is not supported in iOS simulator so we poll instead
@@ -101,6 +118,22 @@ export default function TabThreeScreen() {
           monitorInterval={monitorInterval}
         />
       )}
+      <View className="flex-row align-middle">
+        <Text className="flex-1 font-semibold text-3xl px-4 py-2 bg-shade-2">
+          Logs
+        </Text>
+      </View>
+      <ScrollView className="px-4 gap-y-2 py-2">
+        <Text className="text-l">
+          {logs.map((log, idx) => {
+            return (
+              <Text key={idx} className="text-l">
+                {`${new Date(log.timestamp).toISOString()} - ${log.message} \n\n`}
+              </Text>
+            );
+          })}
+        </Text>
+      </ScrollView>
     </View>
   );
 }
