@@ -9,6 +9,7 @@ import { View, FlatList, ScrollView } from "react-native";
 import { cssInterop, remapProps } from "nativewind";
 import "../global.css";
 import "react-native-reanimated";
+import "@/utils/backgroundChecker";
 
 // component interops for nativewind - just need these once
 cssInterop(Image, { className: "style" });
